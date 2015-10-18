@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 // REST Routes for the API
 app.get('/get-score/:id', score.getScore);
 app.post('/authorize/get-token', authorization.getToken);
+app.post('/authorize/register-key', authorization.registerKey);
 
 
 var server = app.listen(3000, function(){

@@ -11,3 +11,11 @@ exports.getToken = function(req, res) {
 	res.send(400);
 	}
 };
+
+exports.registerKey = function(req, res) {
+	if(req.body.regData) {
+
+	} else {
+	res.send(400);
+	}
+};
