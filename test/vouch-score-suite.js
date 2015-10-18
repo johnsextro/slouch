@@ -14,7 +14,11 @@ suite.discuss('When using vouch-score')
            assert.deepEqual(JSON.parse(body), {"score": 20});
       })
      .next()
-     .discuss('the get-score endpoint should respond with a not found status when the id is not found')
+     .discuss('the get-score endpoint should respond with a 400 Bad Request status when the id is not found')
      .get('/get-score/-1/')
      .expect(400)
+     .next()
+     .discuss('the get-score endpoint should respond with a 404 Not Found status when the id is not provided')
+     .get('/get-score/')
+     .expect(404)
      .export(module);
