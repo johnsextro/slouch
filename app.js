@@ -1,8 +1,3 @@
-
-/**
- * Module dependencies.
- */
-
 var http = require('http')
   , appBoot = require('./appBoot.js')
   , config = require('./config')
