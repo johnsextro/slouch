@@ -2,7 +2,8 @@ var http = require('http')
   , appBoot = require('./appBoot.js')
   , config = require('./config')
   , jwt = require('jsonwebtoken')
-  , bodyParser = require('body-parser');
+  , bodyParser = require('body-parser')
+  , authorization = require('./authorization/service');
 
 var app = appBoot.init();
 
@@ -28,13 +29,7 @@ app.get('/get-score/:id', function(req, res) {
   }
 });
 
-app.post('/authorize/get-token', function(req, res) {
-  if(req.body.key) {
-    res.json({token: "abc123"});
-  } else {
-    res.send(400);
-  }
-});
+app.post('/authorize/get-token', authorization.getToken);
 
 // app.post('/api/createshow', showrest.create);
 // app.put('/api/updateshow/:id', showrest.update);
