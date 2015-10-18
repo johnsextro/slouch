@@ -3,7 +3,8 @@ var http = require('http')
   , config = require('./config')
   , jwt = require('jsonwebtoken')
   , bodyParser = require('body-parser')
-  , authorization = require('./authorization/service');
+  , authorization = require('./authorization/service')
+  , score = require('./score/service');
 
 var app = appBoot.init();
 
@@ -21,13 +22,7 @@ express.compiler.compilers.less.compile = function(str, fn){
 app.use(bodyParser.json());
 
 // REST Routes for the API
-app.get('/get-score/:id', function(req, res) {
-  if (req.params.id == '2') {
-    res.json({score: 20});
-  } else {
-    res.send(400)
-  }
-});
+app.get('/get-score/:id', score.getScore);
 
 app.post('/authorize/get-token', authorization.getToken);
 
