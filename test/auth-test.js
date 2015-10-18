@@ -23,4 +23,15 @@ suite.undiscuss().undiscuss()
 	.post('/authorize/register-key')
 		.expect(400)
 	.undiscuss().undiscuss()
+	.discuss('the register-key endpoint should respond with a 200 and the new key')
+	.discuss('when a new key is successfully registered')
+	.post('/authorize/register-key', {regData: {email: 'john.sextro@gmail.com', website: 'http://johnsextro.com'}})
+		.expect(200)
+	    .expect('should respond with a new key', function (err, res, body) {
+           assert.isNotNull(body);
+           var retVal = JSON.parse(body) 
+           console.log(retVal)
+           assert.ok(retVal.key)
+    	})
+	.undiscuss().undiscuss()
 	.export(module);
