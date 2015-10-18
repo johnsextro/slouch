@@ -3,9 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "watch": "vows ../test/*.js --watch",
+    "start": "nodemon app.js",
     "test": "vows test/*.js"
+  },
+  "devDependencies": {
+    "nodemon": "lastest"
   },
   "dependencies": {
     "api-easy": "latest",
