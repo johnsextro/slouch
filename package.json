@@ -7,7 +7,7 @@
     "test": "vows test/*.js"
   },
   "devDependencies": {
-    "nodemon": "lastest"
+    "nodemon": "latest"
   },
   "dependencies": {
     "api-easy": "latest",
