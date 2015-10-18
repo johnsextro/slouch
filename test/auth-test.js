@@ -10,4 +10,7 @@ suite.discuss('When using the vouch-score')
 
 	    .post('/authorize/get-token', { key: '12345678' })
 	    	.expect(200, { token: "abc123" })
+    	.next()
+    	.post('/authorize/get-token', { key: '-1' })
+	    	.expect(401)
 	    .export(module);
