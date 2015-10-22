@@ -1,5 +1,4 @@
 var crypto = require('crypto')
-var sha1 = crypto.createHash('sha1')
 
 var fakeRedis = {'12345678': 'abc123'}
 
@@ -16,6 +15,7 @@ exports.getToken = function(req, res) {
 };
 
 exports.registerKey = function(req, res) {
+	var sha1 = crypto.createHash('sha1')
 	if(req.body.regData) {
 		if(req.body.regData.email && req.body.regData.website){
 			sha1.update(req.body.regData.email + new Date().getTime())
