@@ -1,11 +1,12 @@
 var crypto = require('crypto')
 
-var fakeRedis = {'12345678': 'abc123'}
+var keyLookup = {'12345678': 'abc123'}
+var siteLookup = {}
 
 exports.getToken = function(req, res) {
 	if(req.body.key) {
-		if(fakeRedis[req.body.key]) {
-			res.json({token: fakeRedis[req.body.key]});
+		if(keyLookup[req.body.key]) {
+			res.json({token: keyLookup[req.body.key]});
 		} else {
 			res.send(401)
 		}
@@ -17,11 +18,15 @@ exports.getToken = function(req, res) {
 exports.registerKey = function(req, res) {
 	var sha1 = crypto.createHash('sha1')
 	if(req.body.regData) {
-		if(req.body.regData.email && req.body.regData.website){
+		var website = req.body.regData.website;
+		if(siteLookup[website]){
+			res.send(500)
+		} else if(req.body.regData.email && website){
 			sha1.update(req.body.regData.email + new Date().getTime())
 			var newKey = sha1.digest('hex')
-			fakeRedis[newKey] = 'newToken'
-			console.log(fakeRedis)
+			keyLookup[newKey] = website
+			siteLookup[website] = newKey
+			console.log(keyLookup)
 			res.json({key: newKey})
 		}
 	} else {
