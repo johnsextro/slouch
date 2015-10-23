@@ -2,17 +2,11 @@ var APIeasy = require('api-easy'),
      assert = require('assert');
 
 var suite = APIeasy.describe('Registartion');
+var expectedApiKey
 
 suite.undiscuss().undiscuss()
-	.discuss('When using the vouch-score')
-	.discuss('registration endpoint')
 	.use('localhost', 3000)
 	.setHeader('Content-Type', 'application/json')
-	.discuss('auth token when the requestors key is verified')
-	.post('/register/request-token', { key: '12345678' })
-		.expect(200, { token: "abc123" })
-	.next()
-	.undiscuss()
 	.discuss('401 Unauthorized status when the requestors key is not found')
 	.post('/register/request-token', { key: '-1' })
 		.expect(401)
@@ -30,8 +24,13 @@ suite.undiscuss().undiscuss()
 	    .expect('should respond with a new key', function (err, res, body) {
            assert.isNotNull(body);
            var retVal = JSON.parse(body) 
-           console.log(retVal)
+           this.expectedApiKey = retVal.apiKey
            assert.ok(retVal.apiKey)
+    	})
+    .next()
+    .post('/register/request-token', { key: expectedApiKey })
+    	.expect('should return the associated token', function(err, res, body) {
+    		console.log(body);
     	})
 	.undiscuss().undiscuss()
 	.discuss('the request-key endpoint should respond with a 200')
