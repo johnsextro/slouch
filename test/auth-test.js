@@ -2,22 +2,21 @@ var APIeasy = require('api-easy'),
      assert = require('assert');
 
 var suite = APIeasy.describe('Registartion');
-var expectedApiKey
+var expectedApiKey = '';
 
-suite.undiscuss().undiscuss()
+suite.discuss('Registration API')
 	.use('localhost', 3000)
 	.setHeader('Content-Type', 'application/json')
 	.discuss('401 Unauthorized status when the requestors key is not found')
 	.post('/register/request-token', { key: '-1' })
-		.expect(401)
-	.next()
-	.undiscuss()
-	.discuss('the request-key endpoint should respond with a 400 Bad Request')
+		.expect(401);
+
+suite.discuss('the request-key endpoint should respond with a 400 Bad Request')
 	.discuss('status when insufficient information was provided to register the new key')
 	.post('/register/request-key')
-		.expect(400)
-	.undiscuss().undiscuss()
-	.discuss('the request-key endpoint should respond with a 200 and the new key')
+		.expect(400);
+
+suite.discuss('the request-key endpoint should respond with a 200 and the new key')
 	.discuss('when a new key is successfully registered')
 	.post('/register/request-key', {regData: {email: 'john.sextro@gmail.com', website: 'http://johnsextro.com'}})
 		.expect(200)
@@ -26,14 +25,9 @@ suite.undiscuss().undiscuss()
            var retVal = JSON.parse(body) 
            this.expectedApiKey = retVal.apiKey
            assert.ok(retVal.apiKey)
-    	})
-    .next()
-    .post('/register/request-token', { key: expectedApiKey })
-    	.expect('should return the associated token', function(err, res, body) {
-    		console.log(body);
-    	})
-	.undiscuss().undiscuss()
-	.discuss('the request-key endpoint should respond with a 200')
+    	});
+
+suite.discuss('the request-key endpoint should respond with a 200')
 	.discuss('when a second request is made')
 	.post('/register/request-key', {regData: {email: 'john.sextro@gmail.com', website: 'http://9principles.com'}})
 		.expect(200)
@@ -43,5 +37,6 @@ suite.undiscuss().undiscuss()
 	.discuss('when a second request is made to register the same site')
 	.post('/register/request-key', {regData: {email: 'john.sextro@gmail.com', website: 'http://9principles.com'}})
 		.expect(500)
-	.undiscuss().undiscuss()
-	.export(module);
+	.undiscuss().undiscuss();
+
+suite.export(module);
