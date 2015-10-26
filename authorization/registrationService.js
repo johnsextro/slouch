@@ -5,7 +5,6 @@ var siteLookup = {}
 
 exports.requestToken = function(req, res) {
 	if(req.body.key) {
-		console.log(req.body.key)
 		if(keyLookup[req.body.key]) {
 			res.json({token: keyLookup[req.body.key]});
 		} else {

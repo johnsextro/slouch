@@ -25,7 +25,15 @@ suite.discuss('the request-key endpoint should respond with a 200 and the new ke
            var retVal = JSON.parse(body) 
            this.expectedApiKey = retVal.apiKey
            assert.ok(retVal.apiKey)
-    	});
+           suite.before('setApiKey', function(outgoing) {
+                outgoing.body = outgoing.body.replace('_API_KEY', retVal.apiKey)
+                return outgoing;
+            })
+    	})
+	.next()
+	.post('/register/request-token', {key: '_API_KEY'})
+		.expect(200);	
+
 
 suite.discuss('the request-key endpoint should respond with a 200')
 	.discuss('when a second request is made')
