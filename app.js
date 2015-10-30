@@ -10,7 +10,7 @@ var app = appBoot.init();
 app.use(bodyParser.json());
 
 // REST Routes for the API
-app.get('/get-score/:id', score.getScore);
+app.post('/get-score', score.getScore);
 app.post('/register/request-token', registration.requestToken);
 app.post('/register/request-key', registration.requestKey);
 
