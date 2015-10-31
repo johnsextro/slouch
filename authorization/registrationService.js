@@ -30,7 +30,9 @@ exports.requestKey = function(req, res) {
 
 exports.reqHasRequiredData = function(body) {
 	var retVal = false;
+	console.log(body.regData);
 	if(body.regData && body.regData.website && body.regData.email) retVal = true;
+	
 	return retVal;
 };
 

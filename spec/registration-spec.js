@@ -11,8 +11,22 @@ describe("Registration", function () {
 		expect(APIKey.length).toBeGreaterThan(10);
 	});
 
-	it("Ensure required data exist to calculate a new API key", function() {
-		expect(registration.reqHasRequiredData({})).toBeFalsy;
-		expect(registration.reqHasRequiredData({body: {regData: {email: 'a@#b.c', website: 'b.c'}}})).toBeTruthy;
+	it("Passes required data check when all data supplied", function() {
+		var actual = registration.reqHasRequiredData({regData: {email: 'a@b.c', website: 'b.c'}});
+		expect(actual).toBe(true);
+	});
+
+	it("Fails required data check when body empty", function() {
+		expect(registration.reqHasRequiredData({})).toBe(false);
+	});
+
+	it("Fails required data check when email empty", function() {
+		var actual = registration.reqHasRequiredData({regData: {email: '', website: 'b.c' }});
+		expect(actual).toBe(false);
+	});
+
+	it("Fails required data check when website empty", function() {
+		var actual = registration.reqHasRequiredData({regData: {email: 'a@b.c', website: '' }});
+		expect(actual).toBe(false);
 	});
 });
