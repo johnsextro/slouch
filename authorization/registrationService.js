@@ -17,7 +17,7 @@ exports.requestToken = function(req, res) {
 };
 
 exports.requestKey = function(req, res) {
-	if(_this.reqHasRequiredData(req.body)) {
+	if(_this.keyReqHasRequiredData(req.body)) {
 		if(_this.siteAlreadyRegistered(req.body.regData.website)){
 			res.send(500)
 		} else {
@@ -28,7 +28,7 @@ exports.requestKey = function(req, res) {
 	}
 };
 
-exports.reqHasRequiredData = function(body) {
+exports.keyReqHasRequiredData = function(body) {
 	var retVal = false;
 	if(body.regData && body.regData.website && body.regData.email) retVal = true;
 	

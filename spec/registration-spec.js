@@ -12,21 +12,21 @@ describe("Registration", function () {
 	});
 
 	it("Passes required data check when all data supplied", function() {
-		var actual = registration.reqHasRequiredData({regData: {email: 'a@b.c', website: 'b.c'}});
+		var actual = registration.keyReqHasRequiredData({regData: {email: 'a@b.c', website: 'b.c'}});
 		expect(actual).toBe(true);
 	});
 
 	it("Fails required data check when body empty", function() {
-		expect(registration.reqHasRequiredData({})).toBe(false);
+		expect(registration.keyReqHasRequiredData({})).toBe(false);
 	});
 
 	it("Fails required data check when email empty", function() {
-		var actual = registration.reqHasRequiredData({regData: {email: '', website: 'b.c' }});
+		var actual = registration.keyReqHasRequiredData({regData: {email: '', website: 'b.c' }});
 		expect(actual).toBe(false);
 	});
 
 	it("Fails required data check when website empty", function() {
-		var actual = registration.reqHasRequiredData({regData: {email: 'a@b.c', website: '' }});
+		var actual = registration.keyReqHasRequiredData({regData: {email: 'a@b.c', website: '' }});
 		expect(actual).toBe(false);
 	});
 });
