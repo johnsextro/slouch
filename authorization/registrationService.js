@@ -17,25 +17,27 @@ exports.requestToken = function(req, res) {
 };
 
 exports.requestKey = function(req, res) {
-	if(_this.keyReqHasRequiredData(req.body)) {
-		if(_this.siteAlreadyRegistered(req.body.regData.website)){
+	if(_this.doesKeyReqHaveRequiredData(req.body)) {
+		if(_this.isSiteAlreadyRegistered(req.body.regData.website)){
 			res.send(500)
 		} else {
-			res.json({'apiKey': _this.calcApiKey(req.body.regData.email, req.body.regData.website) })
+			res.json({'apiKey': _this.calculateApiKey(req.body.regData.email, req.body.regData.website) })
 		}
 	} else {
 		res.send(400);
 	}
 };
 
-exports.keyReqHasRequiredData = function(body) {
+exports.doesKeyReqHaveRequiredData = function(body) {
 	var retVal = false;
-	if(body.regData && body.regData.website && body.regData.email) retVal = true;
+	if(body.regData && body.regData.website && body.regData.email) {
+		retVal = true;
+	}
 	
 	return retVal;
 };
 
-exports.calcApiKey = function(email, siteName) {
+exports.calculateApiKey = function(email, siteName) {
 	var sha1 = crypto.createHash('sha1')
 	sha1.update(email + new Date().getTime());
 	var apiKey = sha1.digest('hex');
@@ -45,6 +47,6 @@ exports.calcApiKey = function(email, siteName) {
 	return apiKey;
 };
 
-exports.siteAlreadyRegistered = function(siteName) {
+exports.isSiteAlreadyRegistered = function(siteName) {
 	return siteLookup[siteName];
 };
