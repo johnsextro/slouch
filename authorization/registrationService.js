@@ -1,9 +1,11 @@
-var crypto = require('crypto')
+var crypto = require('crypto');
+var redis = require('redis');
 
 var keyLookup = {};
 var siteLookup = {};
 var _this = this;
 
+// Begin Public API
 exports.requestToken = function(req, res) {
 	if(req.body.key) {
 		if(keyLookup[req.body.key]) {
@@ -27,6 +29,8 @@ exports.requestKey = function(req, res) {
 		res.send(400);
 	}
 };
+
+// End Public API
 
 exports.doesKeyReqHaveRequiredData = function(body) {
 	var retVal = false;
