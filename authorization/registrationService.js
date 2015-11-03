@@ -1,5 +1,4 @@
 var crypto = require('crypto');
-var redis = require('redis');
 
 var keyLookup = {};
 var siteLookup = {};
