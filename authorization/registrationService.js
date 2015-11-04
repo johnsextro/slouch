@@ -1,8 +1,13 @@
-var crypto = require('crypto');
+var crypto = require('crypto')
+  , redis = require('redis')
+  , client = redis.createClient();
 
 var keyLookup = {};
-var siteLookup = {};
 var _this = this;
+
+client.on("connect", function () {
+    console.log("connected");
+});
 
 // Begin Public API
 exports.requestToken = function(req, res) {
@@ -45,11 +50,15 @@ exports.calculateApiKey = function(email, siteName) {
 	sha1.update(email + new Date().getTime());
 	var apiKey = sha1.digest('hex');
 	keyLookup[apiKey] = siteName;
-	siteLookup[siteName] = apiKey;
+	client.set(siteName, apiKey);
 
 	return apiKey;
 };
 
 exports.isSiteAlreadyRegistered = function(siteName) {
-	return siteLookup[siteName];
+	if(client.exists(siteName) === 1) {
+		return true;
+	} else {
+		return false;
+	}
 };

@@ -4,9 +4,7 @@ var http = require('http')
   , jwt = require('jsonwebtoken')
   , bodyParser = require('body-parser')
   , registration = require('./authorization/registrationService')
-  , score = require('./score/service')
-  , redis = require('redis')
-  , client = redis.createClient();
+  , score = require('./score/service');
 
 var app = appBoot.init();
 app.use(bodyParser.json());
@@ -15,14 +13,6 @@ app.use(bodyParser.json());
 app.post('/get-score', score.getScore);
 app.post('/register/request-token', registration.requestToken);
 app.post('/register/request-key', registration.requestKey);
-
-client.on("error", function (err) {
-    console.log("Error " + err);
-});
-
-client.on('connect', function() {
-    console.log('connected');
-});
 
 var server = app.listen(3000, function(){
   console.log("Express server listening on port " + app.address().port, app.settings.env);

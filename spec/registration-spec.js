@@ -1,8 +1,13 @@
 var registration = require('../authorization/registrationService.js');
 
 describe("Registration", function () {
-	it("Check if a site already exists", function () {
-		expect(registration.isSiteAlreadyRegistered('yo.mama.com')).toBeFalsy();
+	it("Check for new site is false", function () {
+		expect(registration.isSiteAlreadyRegistered('yo.mama.com')).toBe(false);
+	});
+
+	it("Check for existing site is true", function () {
+		registration.calculateApiKey('a@b.c', 'yo.mama.com');
+		expect(registration.isSiteAlreadyRegistered('yo.mama.com')).toBe(true);
 	});
 
 	it("Calculate a new crypto based API key", function() {

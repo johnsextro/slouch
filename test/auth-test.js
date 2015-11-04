@@ -9,12 +9,14 @@ suite.discuss('Registration API')
 	.setHeader('Content-Type', 'application/json')
 	.discuss('401 Unauthorized status when the requestors key is not found')
 	.post('/register/request-token', { key: '-1' })
-		.expect(401);
+		.expect(401)
+	.undiscuss();
 
 suite.discuss('the request-key endpoint should respond with a 400 Bad Request')
 	.discuss('status when insufficient information was provided to register the new key')
 	.post('/register/request-key')
-		.expect(400);
+		.expect(400)
+	.undiscuss().undiscuss();
 
 suite.discuss('the request-key endpoint should respond with a 200 and the new key')
 	.discuss('when a new key is successfully registered')
@@ -32,15 +34,16 @@ suite.discuss('the request-key endpoint should respond with a 200 and the new ke
     	})
 	.next()
 	.post('/register/request-token', {key: '_API_KEY'})
-		.expect(200);	
+		.expect(200)
+	.undiscuss().undiscuss();
 
 
 suite.discuss('the request-key endpoint should respond with a 200')
 	.discuss('when a second request is made')
 	.post('/register/request-key', {regData: {email: 'john.sextro@gmail.com', website: 'http://9principles.com'}})
 		.expect(200)
-	.next()
 	.undiscuss().undiscuss()
+	.next()
 	.discuss('the register-key endpoint should respond with a 500')
 	.discuss('when a second request is made to register the same site')
 	.post('/register/request-key', {regData: {email: 'john.sextro@gmail.com', website: 'http://9principles.com'}})
