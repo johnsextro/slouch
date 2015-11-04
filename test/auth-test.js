@@ -1,5 +1,7 @@
 var APIeasy = require('api-easy'),
-     assert = require('assert');
+     assert = require('assert')
+  , redis = require('redis')
+  , client = redis.createClient();
 
 var suite = APIeasy.describe('Registartion');
 var expectedApiKey = '';
@@ -50,4 +52,6 @@ suite.discuss('the request-key endpoint should respond with a 200')
 		.expect(500)
 	.undiscuss().undiscuss();
 
+client.flushdb();
+client.quit();
 suite.export(module);

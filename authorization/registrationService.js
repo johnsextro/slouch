@@ -24,11 +24,7 @@ exports.requestToken = function(req, res) {
 
 exports.requestKey = function(req, res) {
 	if(_this.doesKeyReqHaveRequiredData(req.body)) {
-		if(_this.isSiteAlreadyRegistered(req.body.regData.website)){
-			res.send(500)
-		} else {
-			res.json({'apiKey': _this.calculateApiKey(req.body.regData.email, req.body.regData.website) })
-		}
+		_this.sendResponseBasedOnSiteExistence(req.body.regData.email, req.body.regData.website, res)	
 	} else {
 		res.send(400);
 	}
@@ -45,20 +41,22 @@ exports.doesKeyReqHaveRequiredData = function(body) {
 	return retVal;
 };
 
-exports.calculateApiKey = function(email, siteName) {
+exports.calculateApiKey = function(email, siteName, res) {
 	var sha1 = crypto.createHash('sha1')
 	sha1.update(email + new Date().getTime());
 	var apiKey = sha1.digest('hex');
 	keyLookup[apiKey] = siteName;
-	client.set(siteName, apiKey);
-
-	return apiKey;
+	client.set(siteName, apiKey, function() {
+		res.json({'apiKey': apiKey });
+	});
 };
 
-exports.isSiteAlreadyRegistered = function(siteName) {
-	if(client.exists(siteName) === 1) {
-		return true;
-	} else {
-		return false;
-	}
+exports.sendResponseBasedOnSiteExistence = function(email, siteName, res) {
+	client.get(siteName, function(err, reply) {
+		if(reply) { //The site exists already
+			res.send(500)
+		} else {
+			_this.calculateApiKey(email, siteName, res); 
+		}
+	});
 };
