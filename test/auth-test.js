@@ -3,6 +3,11 @@ var APIeasy = require('api-easy'),
   , redis = require('redis')
   , client = redis.createClient();
 
+client.on("error", function (err) {
+    console.log("Unable to create a connection to Redis");
+    console.log("Install Redis using the default IP: 127.0.0.1 and the default port: 6379");
+});
+
 var suite = APIeasy.describe('Registartion');
 var expectedApiKey = '';
 
