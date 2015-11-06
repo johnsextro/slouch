@@ -41,13 +41,19 @@ exports.doesKeyReqHaveRequiredData = function(body) {
 	return retVal;
 };
 
-exports.calculateApiKey = function(email, siteName, res) {
+exports.hello = function(res) {
+	res.json({'hello': 'hello'});
+	res.end();
+};
+
+exports.sendApiKey = function(email, siteName, res) {
 	var sha1 = crypto.createHash('sha1')
 	sha1.update(email + new Date().getTime());
 	var apiKey = sha1.digest('hex');
 	keyLookup[apiKey] = siteName;
 	client.set(siteName, apiKey, function() {
 		res.json({'apiKey': apiKey });
+		res.end();;
 	});
 };
 
@@ -56,7 +62,7 @@ exports.sendResponseBasedOnSiteExistence = function(email, siteName, res) {
 		if(reply) { //The site exists already
 			res.send(500)
 		} else {
-			_this.calculateApiKey(email, siteName, res); 
+			_this.sendApiKey(email, siteName, res); 
 		}
 	});
 };

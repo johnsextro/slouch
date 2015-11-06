@@ -2,12 +2,11 @@ var mockery = require('mockery');
 var httpMocks = require('node-mocks-http');
 var redisMock = require('redis-mock');
 var client = redisMock.createClient();
-var res = httpMocks.createResponse();
 
 describe("Registration", function () {
 	var registration;
 
-	beforeAll(function() {
+	beforeEach(function() {
 		mockery.registerAllowable('../authorization/registrationService.js');
 		mockery.registerAllowables(['crypto', 'node-mocks-http']);
 		mockery.registerMock('redis', redisMock);
@@ -16,7 +15,7 @@ describe("Registration", function () {
 		registration = require('../authorization/registrationService.js');
 	});
 
-	afterAll(function() {
+	afterEach(function() {
 		mockery.disable();
 	    mockery.deregisterAll();
 	});
@@ -35,18 +34,12 @@ describe("Registration", function () {
 		expect(actual).toBe(false);
 	});
 
-	it("Get success response from new site registration", function() {
-		// var r = redisMock.createClient();
-		// r.set('b.c', '124', function (err ,result) {
-		// 	r.get("b.c", function (err, result) {
-		// 		console.log(result);
-		// 		expect(result).toEqual('124');
-		// 	});			
-		// });
+	it("Get success response from new site registration", function(done) {
+		var res = httpMocks.createResponse();
 		registration.sendResponseBasedOnSiteExistence('a@b.c', 'b.c', res);
-		expect(res.statusCode).toEqual(200);
-		client.get("b.c", function (err, result) {
-			expect(result.length).toBeGreater(12);
-		});			
+		// registration.hello(res);
+		done();
+		console.error(JSON.parse(res._getData()));
+		expect(res._isJSON()).toBe(true);
 	});	
 });
