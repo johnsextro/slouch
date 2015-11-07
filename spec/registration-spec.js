@@ -34,12 +34,23 @@ describe("Registration", function () {
 		expect(actual).toBe(false);
 	});
 
-	it("Get success response from new site registration", function(done) {
+	it("Create API Key from new site registration", function(done) {
 		var res = httpMocks.createResponse();
-		registration.sendResponseBasedOnSiteExistence('a@b.c', 'b.c', res);
-		// registration.hello(res);
-		done();
-		console.error(JSON.parse(res._getData()));
+		registration.sendApiKey('a@b.c', 'b.c', res);
 		expect(res._isJSON()).toBe(true);
+		var data = JSON.parse(res._getData());
+		expect(data.apiKey).toBeDefined();
+		client.get('b.c', function(err, reply) {
+			expect(reply).toBeDefined();
+			expect(reply).not.toBeNull();
+			done();
+		});
 	});	
+
+	it("When site exists will get a 500", function() {
+		var res = httpMocks.createResponse();
+		registration.sendResponseBasedOnSiteExistence(true, 'a@b.c', 'b.c', res);
+		expect(res.statusCode).toBe(500);
+	});
+
 });

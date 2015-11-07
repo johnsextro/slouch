@@ -24,7 +24,7 @@ exports.requestToken = function(req, res) {
 
 exports.requestKey = function(req, res) {
 	if(_this.doesKeyReqHaveRequiredData(req.body)) {
-		_this.sendResponseBasedOnSiteExistence(req.body.regData.email, req.body.regData.website, res)	
+		_this.siteExists(req.body.regData.email, req.body.regData.website, res, sendResponseBasedOnSiteExistence)	
 	} else {
 		res.send(400);
 	}
@@ -51,18 +51,21 @@ exports.sendApiKey = function(email, siteName, res) {
 	sha1.update(email + new Date().getTime());
 	var apiKey = sha1.digest('hex');
 	keyLookup[apiKey] = siteName;
-	client.set(siteName, apiKey, function() {
-		res.json({'apiKey': apiKey });
-		res.end();;
+	client.set(siteName, apiKey);
+	res.json({'apiKey': apiKey });
+	res.end();
+};
+
+exports.siteExists = function(email, siteName, res, callback) {
+	client.get(siteName, function(err, reply) {
+		callback(reply, email, siteName, res);
 	});
 };
 
-exports.sendResponseBasedOnSiteExistence = function(email, siteName, res) {
-	client.get(siteName, function(err, reply) {
-		if(reply) { //The site exists already
-			res.send(500)
-		} else {
-			_this.sendApiKey(email, siteName, res); 
-		}
-	});
-};
+exports.sendResponseBasedOnSiteExistence = function(reply, email, siteName, res) {
+	if(reply) { //The site exists already
+		res.send(500)
+	} else {
+		_this.sendApiKey(email, siteName, res); 
+	}
+}
