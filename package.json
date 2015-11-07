@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon app.js",
-    "test": "vows test/*.js"
+    "test": "vows test/*.js",
+    "cover": "istanbul cover --include-all-sources jasmine-node spec"
   },
   "devDependencies": {
     "api-easy": "latest",
@@ -13,7 +14,9 @@
     "node-mocks-http": "^1.5.0",
     "nodemon": "latest",
     "redis-mock": "latest",
-    "vows": "latest"
+    "vows": "latest",
+    "istanbul": "latest",
+    "jasmine-node": "latest"
   },
   "dependencies": {
     "body-parser": "^1.14.1",
