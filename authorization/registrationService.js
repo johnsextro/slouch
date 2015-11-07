@@ -41,11 +41,6 @@ exports.doesKeyReqHaveRequiredData = function(body) {
 	return retVal;
 };
 
-exports.hello = function(res) {
-	res.json({'hello': 'hello'});
-	res.end();
-};
-
 exports.sendApiKey = function(email, siteName, res) {
 	var sha1 = crypto.createHash('sha1')
 	sha1.update(email + new Date().getTime());
