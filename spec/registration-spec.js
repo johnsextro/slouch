@@ -20,6 +20,11 @@ describe("Registration", function () {
 	    mockery.deregisterAll();
 	});
 
+	it("Passes required data check when all data present", function() {
+		var actual = registration.doesKeyReqHaveRequiredData({regData: {email: 'a@b.c', website: 'b.c' }});
+		expect(actual).toBe(true);
+	});
+
 	it("Fails required data check when body empty", function() {
 		expect(registration.doesKeyReqHaveRequiredData({})).toBe(false);
 	});
@@ -31,6 +36,11 @@ describe("Registration", function () {
 
 	it("Fails required data check when website empty", function() {
 		var actual = registration.doesKeyReqHaveRequiredData({regData: {email: 'a@b.c', website: '' }});
+		expect(actual).toBe(false);
+	});
+
+	it("Fails required data check when regData is missing", function() {
+		var actual = registration.doesKeyReqHaveRequiredData({regData: ''});
 		expect(actual).toBe(false);
 	});
 
@@ -76,5 +86,25 @@ describe("Registration", function () {
 			done();
 		});
 	});	
+
+	it("Call to requestKey returns 200 when data for new site supplied", function() {
+		var req = httpMocks.createRequest({
+			method: 'POST',	url: '/register/request-key', 
+			body: {regData: {email: 'john.sextro@gmail.com', website: 'http://johnsextro.com'}}
+		});
+		var res = httpMocks.createResponse();
+		registration.requestKey(req, res);
+		expect(res.statusCode).toBe(200);
+	});
+
+	it("Call to requestKey returns 400 when missing required data", function() {
+		var req = httpMocks.createRequest({
+			method: 'POST',	url: '/register/request-key', 
+			body: {regData: {email: 'john.sextro@gmail.com', website: ''}}
+		});
+		var res = httpMocks.createResponse();
+		registration.requestKey(req, res);
+		expect(res.statusCode).toBe(400);
+	});
 
 });

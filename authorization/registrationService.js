@@ -24,7 +24,7 @@ exports.requestToken = function(req, res) {
 
 exports.requestKey = function(req, res) {
 	if(_this.doesKeyReqHaveRequiredData(req.body)) {
-		_this.siteExists(req.body.regData.email, req.body.regData.website, res, sendResponseBasedOnSiteExistence)	
+		_this.siteExists(req.body.regData.email, req.body.regData.website, res, _this.sendResponseBasedOnSiteExistence)	
 	} else {
 		res.send(400);
 	}
