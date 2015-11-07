@@ -47,16 +47,32 @@ describe("Registration", function () {
 		});
 	});	
 
-	it("When site exists will get a 500", function() {
+	it("When site exists response will be a 500", function() {
 		var res = httpMocks.createResponse();
 		registration.sendResponseBasedOnSiteExistence(true, 'a@b.c', 'b.c', res);
 		expect(res.statusCode).toBe(500);
+	});
+
+	it("When site exists response will be a 200", function() {
+		var res = httpMocks.createResponse();
+		registration.sendResponseBasedOnSiteExistence(null, 'oh@oh.mg', 'oh.mg', res);
+		expect(res.statusCode).toBe(200);
 	});
 
 	it("siteExists is false when no site exists", function(done) {
 		var res = httpMocks.createResponse();
 		registration.siteExists('new@new.com', 'new.com', res, function(reply, email, siteName, res) {
 			expect(reply).toBeFalsy();
+			done();
+		});
+	});	
+
+	it("siteExists is true when site exists", function(done) {
+		var res = httpMocks.createResponse();
+		registration.sendApiKey('x@y.z', 'y.z', res);
+
+		registration.siteExists('x@y.z', 'y.z', res, function(reply, email, siteName, res) {
+			expect(reply).toBeTruthy();
 			done();
 		});
 	});	
