@@ -44,16 +44,15 @@ describe("Registration", function () {
 		expect(actual).toBe(false);
 	});
 
-	it("Create API Key from new site registration", function(done) {
+	it("Create API Key from new site registration", function() {
 		var res = httpMocks.createResponse();
 		registration.sendApiKey('a@b.c', 'b.c', res);
 		expect(res._isJSON()).toBe(true);
 		var data = JSON.parse(res._getData());
 		expect(data.apiKey).toBeDefined();
-		client.get('b.c', function(err, reply) {
+		client.hget('b.c key', function(err, reply) {
 			expect(reply).toBeDefined();
 			expect(reply).not.toBeNull();
-			done();
 		});
 	});	
 
@@ -69,21 +68,19 @@ describe("Registration", function () {
 		expect(res.statusCode).toBe(200);
 	});
 
-	it("siteExists is false when no site exists", function(done) {
+	it("siteExists is false when no site exists", function() {
 		var res = httpMocks.createResponse();
 		registration.siteExists('new@new.com', 'new.com', res, function(reply, email, siteName, res) {
 			expect(reply).toBeFalsy();
-			done();
 		});
 	});	
 
-	it("siteExists is true when site exists", function(done) {
+	it("siteExists is true when site exists", function() {
 		var res = httpMocks.createResponse();
 		registration.sendApiKey('x@y.z', 'y.z', res);
 
 		registration.siteExists('x@y.z', 'y.z', res, function(reply, email, siteName, res) {
 			expect(reply).toBeTruthy();
-			done();
 		});
 	});	
 

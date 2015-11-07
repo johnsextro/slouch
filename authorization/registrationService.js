@@ -46,13 +46,13 @@ exports.sendApiKey = function(email, siteName, res) {
 	sha1.update(email + new Date().getTime());
 	var apiKey = sha1.digest('hex');
 	keyLookup[apiKey] = siteName;
-	client.set(siteName, apiKey);
+	client.hmset(siteName, {'email': email, 'key': apiKey});
 	res.json({'apiKey': apiKey });
 	res.end();
 };
 
 exports.siteExists = function(email, siteName, res, callback) {
-	client.get(siteName, function(err, reply) {
+	client.hgetall(siteName, function(err, reply) {
 		callback(reply, email, siteName, res);
 	});
 };
