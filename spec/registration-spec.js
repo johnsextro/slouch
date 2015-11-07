@@ -53,4 +53,12 @@ describe("Registration", function () {
 		expect(res.statusCode).toBe(500);
 	});
 
+	it("siteExists is false when no site exists", function(done) {
+		var res = httpMocks.createResponse();
+		registration.siteExists('new@new.com', 'new.com', res, function(reply, email, siteName, res) {
+			expect(reply).toBeFalsy();
+			done();
+		});
+	});	
+
 });
