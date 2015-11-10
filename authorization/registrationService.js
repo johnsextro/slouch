@@ -12,7 +12,11 @@ client.on("connect", function () {
 exports.requestToken = function(req, res) {
 	var apiKey = req.body.key;
 	if(apiKey) {
-		_this.tokenExists(apiKey, _this.sendTokenResponse)		
+		if(client.exists(apiKey)){
+			res.json({token: apiKey});	
+		} else {
+			res.send(401);	
+		}
 	} else {
 		res.send(400);
 	}
@@ -27,20 +31,6 @@ exports.requestKey = function(req, res) {
 };
 
 // End Public API
-
-exports.tokenExists = function(apiKey, callback) {
-	client.exists(apiKey, function(err, reply) {
-		callback(reply, apiKey, res);
-	});
-}
-
-exports.sendTokenResponse = function(reply, apiKey, res) {
-	if(reply){
-		res.json({token: apiKey});	
-	} else {
-		res.send(401);	
-	}
-}
 
 exports.doesKeyReqHaveRequiredData = function(body) {
 	var retVal = false;
