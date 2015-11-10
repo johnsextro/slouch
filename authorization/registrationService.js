@@ -12,11 +12,13 @@ client.on("connect", function () {
 exports.requestToken = function(req, res) {
 	var apiKey = req.body.key;
 	if(apiKey) {
-		if(client.exists(apiKey)){
-			res.json({token: apiKey});	
-		} else {
-			res.send(401);	
-		}
+		client.exists(apiKey, function(err, reply) {
+			if(reply){
+				res.json({token: apiKey});	
+			} else {
+				res.send(401);	
+			}
+		});
 	} else {
 		res.send(400);
 	}

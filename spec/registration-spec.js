@@ -124,7 +124,7 @@ describe("Registration", function () {
 		expect(res.statusCode).toBe(401);
 	});
 
-	it("Call to requestToken returns the token when valid key supplied", function(done) {
+	it("Call to requestToken returns the token when valid key supplied", function() {
 		var keyResponse = httpMocks.createResponse();
 		registration.sendApiKey('test@test.123', 'test.123', keyResponse);
 		var data = JSON.parse(keyResponse._getData());
@@ -136,7 +136,6 @@ describe("Registration", function () {
 		});
 		var res = httpMocks.createResponse();
 		registration.requestToken(req, res);
-		done();
 		expect(res.statusCode).toBe(200);
 		var data = JSON.parse(res._getData());
 		expect(data.token).toBeDefined();

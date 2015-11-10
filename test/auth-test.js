@@ -15,7 +15,7 @@ suite.discuss('Registration API')
 	.use('localhost', 3000)
 	.setHeader('Content-Type', 'application/json')
 	.discuss('401 Unauthorized status when the requestors key is not found')
-	.post('/register/request-token', { key: '-1' })
+	.post('/register/request-token', { key: 'invalid' })
 		.expect(401)
 	.undiscuss();
 
