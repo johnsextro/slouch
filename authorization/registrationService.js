@@ -12,23 +12,12 @@ client.on("connect", function () {
 exports.requestToken = function(req, res) {
 	var apiKey = req.body.key;
 	if(apiKey) {
-		console.log('apiKey ' + apiKey);
 		client.get(apiKey, function(err, reply) {
 			_this.sendTokenResponse(reply, apiKey, res);
 		});
 	} else {
 		res.send(400);
 	}
-};
-
-exports.sendTokenResponse = function(reply, apiKey, res) {
-	console.log(typeof reply);
-	console.log(reply);
-	if(reply !== null) {
-		res.json({token: apiKey});
-	} else {
-		res.send(401);
-	}	
 };
 
 exports.requestKey = function(req, res) {
@@ -40,6 +29,14 @@ exports.requestKey = function(req, res) {
 };
 
 // End Public API
+
+exports.sendTokenResponse = function(reply, apiKey, res) {
+	if(reply !== null) {
+		res.json({token: apiKey});
+	} else {
+		res.send(401);
+	}	
+};
 
 exports.doesKeyReqHaveRequiredData = function(body) {
 	var retVal = false;
