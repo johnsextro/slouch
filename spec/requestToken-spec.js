@@ -20,6 +20,21 @@ describe("Request token", function () {
 	    mockery.deregisterAll();
 	});
 
+	// it("spike", function(done) {
+	// 	var apiKey = '12345ABC';
+		
+	// 	client.get(apiKey, function(err, reply) {
+	// 		console.log(typeof reply);
+	// 		console.log(reply);
+	// 		if(reply !== null) {
+	// 			console.error('found');
+	// 		} else {
+	// 			console.error('not found');
+	// 		}
+	// 		done();
+	// 	});
+	// });
+
 	it("Call to requestToken returns 401 when key is invalid", function() {
 		var req = httpMocks.createRequest({
 			method: 'POST',	url: '/register/request-token', 

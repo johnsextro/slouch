@@ -12,14 +12,23 @@ client.on("connect", function () {
 exports.requestToken = function(req, res) {
 	var apiKey = req.body.key;
 	if(apiKey) {
-		if(client.exists(apiKey)){
-			res.json({token: apiKey});	
-		} else {
-			res.send(401);	
-		}
+		console.log('apiKey ' + apiKey);
+		client.get(apiKey, function(err, reply) {
+			_this.sendTokenResponse(reply, apiKey, res);
+		});
 	} else {
 		res.send(400);
 	}
+};
+
+exports.sendTokenResponse = function(reply, apiKey, res) {
+	console.log(typeof reply);
+	console.log(reply);
+	if(reply !== null) {
+		res.json({token: apiKey});
+	} else {
+		res.send(401);
+	}	
 };
 
 exports.requestKey = function(req, res) {
