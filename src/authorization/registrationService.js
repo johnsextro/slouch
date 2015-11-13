@@ -1,6 +1,6 @@
 var crypto = require('crypto')
   , redis = require('redis')
-  , client = redis.createClient();
+  , client = redis.createClient('redis', '6379');
 
 var _this = this;
 
