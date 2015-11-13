@@ -1,16 +1,16 @@
-FROM    centos:centos6
+FROM    centos:latest
 
 # Enable Extra Packages for Enterprise Linux (EPEL) for CentOS
-RUN     yum install -y epel-release
+RUN     yum install epel-release -y
 # Install Node.js and npm
-RUN     yum install -y nodejs npm
+RUN     yum install nodejs npm -y
 
 # Install app dependencies
-COPY package.json /src/package.json
+COPY src/package.json /src/package.json
 RUN cd /src; npm install
 
 # Bundle app source
-COPY . /src
+COPY /src/. /src
 
 EXPOSE  3000
-CMD ["nodemon", "/src/app.js"]
+CMD ["node", "/src/app.js"]
