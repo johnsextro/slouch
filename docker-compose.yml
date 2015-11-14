@@ -1,5 +1,5 @@
 web:
-  build: .
+  image: johnsextro/slouch:dev
   volumes:
     - "./app:/src/app"
   ports:
