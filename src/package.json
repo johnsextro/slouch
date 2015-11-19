@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon src/app.js",
+    "start": "nodemon app.js",
     "test": "vows test/*.js",
     "cover": "istanbul cover --include-all-sources jasmine-node spec"
   },
