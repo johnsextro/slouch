@@ -4,20 +4,18 @@ var redisMock = require('redis-mock');
 var client = redisMock.createClient();
 
 describe("Registration", function () {
-	var registration;
+	var registration = require('../authorization/registrationService.js');
 
 	beforeEach(function() {
-		mockery.registerAllowable('../authorization/registrationService.js');
-		mockery.registerAllowables(['crypto', 'node-mocks-http', 'querystring']);
-		mockery.registerMock('redis', redisMock);
-		mockery.registerMock('client', client);
-		mockery.enable();
-		registration = require('../authorization/registrationService.js');
+		// mockery.registerAllowable('../authorization/registrationService.js');
+		// mockery.registerAllowables(['crypto', 'node-mocks-http', 'querystring']);
+		// mockery.enable();
+		
 	});
 
 	afterEach(function() {
-		mockery.disable();
-	    mockery.deregisterAll();
+		// mockery.disable();
+	 //    mockery.deregisterAll();
 	});
 
 	it("Passes required data check when all data present", function() {
@@ -46,7 +44,7 @@ describe("Registration", function () {
 
 	it("Create API Key from new site registration", function() {
 		var res = httpMocks.createResponse();
-		registration.sendApiKey('a@b.c', 'b.c', res);
+		registration.sendApiKey('a@b.c', 'b.c', res, client);
 		expect(res._isJSON()).toBe(true);
 		var data = JSON.parse(res._getData());
 		expect(data.apiKey).toBeDefined();
@@ -58,30 +56,30 @@ describe("Registration", function () {
 
 	it("When site exists response will be a 500", function() {
 		var res = httpMocks.createResponse();
-		registration.sendResponseBasedOnSiteExistence(true, 'a@b.c', 'b.c', res);
+		registration.sendResponseBasedOnSiteExistence(true, 'a@b.c', 'b.c', res, client);
 		expect(res.statusCode).toBe(500);
 	});
 
 	it("When site exists response will be a 200", function() {
 		var res = httpMocks.createResponse();
-		registration.sendResponseBasedOnSiteExistence(null, 'oh@oh.mg', 'oh.mg', res);
+		registration.sendResponseBasedOnSiteExistence(null, 'oh@oh.mg', 'oh.mg', res, client);
 		expect(res.statusCode).toBe(200);
 	});
 
 	it("siteExists is false when no site exists", function() {
 		var res = httpMocks.createResponse();
-		registration.siteExists('new@new.com', 'new.com', res, function(reply, email, siteName, res) {
+		registration.siteExists('new@new.com', 'new.com', res, function(reply, email, siteName, res, client) {
 			expect(reply).toBeFalsy();
-		});
+		}, client);
 	});	
 
 	it("siteExists is true when site exists", function() {
 		var res = httpMocks.createResponse();
-		registration.sendApiKey('x@y.z', 'y.z', res);
+		registration.sendApiKey('x@y.z', 'y.z', res, client);
 
 		registration.siteExists('x@y.z', 'y.z', res, function(reply, email, siteName, res) {
 			expect(reply).toBeTruthy();
-		});
+		}, client);
 	});	
 
 	it("apiKey is not registered will respond with 401", function() {
