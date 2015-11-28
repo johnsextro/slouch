@@ -5,6 +5,7 @@ var APIeasy = require('api-easy'),
 
 var suite = APIeasy.describe('vouch-score');
 client.on("connect", function () {
+    client.select(1);
     client.set('2', 20);
 });
 
