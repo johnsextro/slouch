@@ -1,12 +1,20 @@
-var fakeRedis = {'2': 20}
-exports.getScore = function(req, res) {
+var _this = this;
+
+exports.getScore = function(req, res, redisClient) {
 	if (req.body.userId) {
-		if(fakeRedis[req.body.userId]){
-			res.json({score: fakeRedis[req.body.userId]});
-		} else {
-			res.send(400)
-		}
+		redisClient.get(req.body.userId, function(err, reply) {
+			_this.sendScoreResponse(res, reply);
+		});
 	} else {
 		res.send(400)
 	}
 };
+
+exports.sendScoreResponse = function(res, reply) {
+	console.error(reply);
+	if(reply){
+		res.json({score: reply});
+	} else {
+		res.send(400);
+	}
+}

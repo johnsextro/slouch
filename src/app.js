@@ -16,7 +16,9 @@ var app = appBoot.init();
 app.use(bodyParser.json());
 
 // REST Routes for the API
-app.post('/get-score', score.getScore);
+app.post('/get-score', function(req, res) {
+	score.getScore(req, res, client);
+});
 app.post('/register/request-token', function(req, res) {
 	registration.requestToken(req, res, client);
 });
